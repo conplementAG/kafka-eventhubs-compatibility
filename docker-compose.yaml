@@ -1,0 +1,67 @@
+version: '3.2'
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    restart: "always"
+    container_name: "zookeeper"
+    environment: 
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: bitnami/kafka:latest
+    restart: "always"
+    container_name: "kafka"
+    environment: 
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on: 
+      - zookeeper
+  kafka-init:
+    image: bitnami/kafka:latest
+    container_name: kafka-init
+    restart: on-failure
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    entrypoint: kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic test
+    depends_on:
+      - kafka
+  producer-kafka:
+    image: producer:latest
+    container_name: producer-kafka
+    ports:
+      - "8080:8080"
+    restart: "always"
+    environment:
+      - KAFKA_SERVER=kafka:9092
+      - KAFKA_TOPIC=test
+    command: ["java", "-jar", "-Dspring.profiles.active=kafka", "app.jar"]
+    depends_on:
+      - kafka-init
+  consumer-kafka:
+    image: consumer:latest
+    container_name: consumer-kafka
+    restart: "always"
+    environment:
+      - KAFKA_SERVER=kafka:9092
+      - KAFKA_TOPIC=test
+    command: ["java", "-jar", "-Dspring.profiles.active=kafka", "app.jar"]
+    depends_on:
+      - kafka-init
+  producer-eventhub:
+    image: producer:latest
+    container_name: producer-eventhub
+    ports:
+      - "8081:8080"
+    restart: "always"
+    env_file:
+      - .env
+    command: ["java", "-jar", "-Dspring.profiles.active=eventhub", "app.jar"]
+  consumer-eventhub:
+    image: consumer:latest
+    container_name: consumer-eventhub
+    restart: "always"
+    env_file:
+      - .env
+    command: ["java", "-jar", "-Dspring.profiles.active=eventhub", "app.jar"]
+ 
+  
