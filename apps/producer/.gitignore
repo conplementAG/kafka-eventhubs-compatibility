@@ -1,9 +1,9 @@
 ##############################
 ## Java
 ##############################
-target/
-bin/
 .settings/
+[Bb]in/
+[Tt]arget/
 .mtj.tmp/
 *.class
 *.jar
