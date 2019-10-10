@@ -1,8 +1,0 @@
-spring:
-   kafka:
-      bootstrap-servers: ${KAFKA_SERVER}
-      producer:
-         key-serializer: org.apache.kafka.common.serialization.StringSerializer
-         value-serializer: org.apache.kafka.common.serialization.StringSerializer
-   app:
-      topic: ${KAFKA_TOPIC}
