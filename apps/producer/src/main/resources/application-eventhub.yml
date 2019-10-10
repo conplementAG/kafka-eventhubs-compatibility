@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    bootstrap-servers: ${EVENTHUB_SERVER}
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="${EVENTHUB_CONN_STRING}";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  app:
+   topic: ${KAFKA_TOPIC}
+ 
