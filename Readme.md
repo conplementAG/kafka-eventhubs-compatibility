@@ -70,3 +70,6 @@ You can access them using:
 - `localhost:8081/kafka/publish` producer connecting to Event Hubs instance
 
 You can use Postman or curl to send a POST request. It needs just one attribute as part of the request called `message` of type String.
+
+## Kafka features that are not supported currently by Event Hubs 
+https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-for-kafka-ecosystem-overview#features-that-are-not-yet-supported
